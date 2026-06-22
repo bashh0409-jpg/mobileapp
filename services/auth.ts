@@ -2,15 +2,25 @@ import { supabase } from "./supabase";
 import * as WebBrowser from "expo-web-browser";
 import { makeRedirectUri } from "expo-auth-session";
 import * as SecureStore from "expo-secure-store";
+import { Platform } from "react-native";
 
 const AUTH_SESSION_KEY = "supabase_auth_session";
+
+// ── Vercel deployment URL for web ─────────────────────────────────
+export const VERCEL_URL = "https://mobileapp-sage.vercel.app";
 
 WebBrowser.maybeCompleteAuthSession();
 
 // ── Redirect URI ─────────────────────────────────────────────────
 // Returns the redirect URI that needs to be added to Supabase.
-// Call this FIRST to see what URL to add to Supabase dashboard.
+// On native: uses the custom scheme (verceldashboard://)
+// On web: uses the deployed Vercel URL
 export const getRedirectUri = () => {
+  // On web, always use the Vercel URL
+  if (Platform.OS === "web") {
+    return `${VERCEL_URL}/auth/callback`;
+  }
+
   const uri = makeRedirectUri({
     scheme: "verceldashboard",
     path: "/auth/callback",

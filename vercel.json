@@ -1,0 +1,22 @@
+{
+  "outputDirectory": "dist",
+  "buildCommand": "npx expo export --platform web",
+  "devCommand": "npx expo start --web",
+  "rewrites": [
+    {
+      "source": "/((?!_expo/.*|assets/.*|favicon\\.ico).*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/_expo/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}
